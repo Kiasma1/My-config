@@ -16,10 +16,16 @@ Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java', 'go'] }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'Shougo/echodoc.vim'
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+
+if has('nvim') || has('patch-8.0.902')
+  Plug 'mhinz/vim-signify'
+else
+  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+endif
 
 call plug#end()
 
-  set noshowmode
 " Key map {{{
   let mapleader = "\<Space>"
   imap ff <Esc>
@@ -35,6 +41,7 @@ call plug#end()
 " }}}
 
 " 基本设置 {{{
+  set updatetime=100
   set cursorline "突出当前行
   set number "显示行号
   set termguicolors " 24bit颜色
@@ -92,7 +99,7 @@ call plug#end()
   " 设置 F10 打开/关闭 Quickfix 窗口
   nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
   " 设置 F9 单文件：编译
-  nnoremap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+  nnoremap <silent> <F9> :AsyncRun g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
   " 设置 F8 项目：运行
   nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
   " 设置 F7 项目：编译
@@ -107,6 +114,7 @@ call plug#end()
 " }}}
 "
 " YCM {{{
+  let g:ycm_confirm_extra_conf = 1
   let g:ycm_add_preview_to_completeopt = 0
   let g:ycm_show_diagnostics_ui = 0
   let g:ycm_server_log_level = 'info'
