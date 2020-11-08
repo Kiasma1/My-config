@@ -15,9 +15,11 @@ Plug 'kana/vim-textobj-syntax'
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java', 'go'] }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'Shougo/echodoc.vim'
 
 call plug#end()
 
+  set noshowmode
 " Key map {{{
   let mapleader = "\<Space>"
   imap ff <Esc>
@@ -25,8 +27,6 @@ call plug#end()
   imap ( ()<Esc>i
   imap [ []<Esc>i
   imap { {}<Esc>i
-  imap " ""<Esc>i
-  imap ' ''<Esc>i
 
   map <C-h> <C-w>h
   map <C-j> <C-w>j
