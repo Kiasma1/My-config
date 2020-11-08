@@ -17,6 +17,7 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'Shougo/echodoc.vim'
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
+Plug 'preservim/nerdtree'
 
 if has('nvim') || has('patch-8.0.902')
   Plug 'mhinz/vim-signify'
@@ -38,6 +39,8 @@ call plug#end()
   map <C-j> <C-w>j
   map <C-k> <C-w>k
   map <C-l> <C-w>l
+
+  map <leader>t :NERDTreeToggle<CR>
 " }}}
 
 " 基本设置 {{{
