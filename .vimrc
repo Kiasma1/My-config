@@ -1,39 +1,50 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/plugged')
 
-Plug 'morhetz/gruvbox'
 Plug 'universal-ctags/ctags'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'preservim/tagbar'
+
+Plug 'morhetz/gruvbox'
+
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ycm-core/YouCompleteMe'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'dense-analysis/ale'
-Plug 'fatih/vim-go'
-Plug 'preservim/tagbar'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-syntax'
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java', 'go'] }
-Plug 'sgur/vim-textobj-parameter'
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'Shougo/echodoc.vim'
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
-Plug 'preservim/nerdtree'
+Plug 'fatih/vim-go', { 'for':'go' }
 
-if has('nvim') || has('patch-8.0.902')
-  Plug 'mhinz/vim-signify'
-else
-  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-endif
+" Plug 'kana/vim-textobj-user'
+" Plug 'kana/vim-textobj-indent'
+" Plug 'kana/vim-textobj-syntax'
+" Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java', 'go'] }
+" Plug 'sgur/vim-textobj-parameter'
+
+Plug 'Shougo/echodoc.vim'
+
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'preservim/nerdtree', {'on': 'NERDTreeToggle' }
+
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'gcmt/wildfire.vim'
+Plug 'tpope/vim-surround'
+
+Plug 'mhinz/vim-signify'
 
 call plug#end()
 
 " Key map {{{
   let mapleader = "\<Space>"
-  imap ff <Esc>
+  imap jj <Esc>
   
-  imap ( ()<Esc>i
-  imap [ []<Esc>i
-  imap { {}<Esc>i
+" imap ( ()<Esc>i
+" imap [ []<Esc>i
+" imap { {}<Esc>i
 
   map <C-h> <C-w>h
   map <C-j> <C-w>j
@@ -100,19 +111,22 @@ call plug#end()
   " 任务结束时候响铃提醒
   let g:asyncrun_bell = 1
   " 设置 F10 打开/关闭 Quickfix 窗口
-  nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+  nmap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+  
   " 设置 F9 单文件：编译
-  nnoremap <silent> <F9> :AsyncRun g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+  autocmd FileType cpp nmap <silent> <F9> :AsyncRun g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+  autocmd FileType c nmap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+
   " 设置 F8 项目：运行
-  nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
+  autocmd FileType cpp,c nmap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
   " 设置 F7 项目：编译
-  nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
+  autocmd FileType cpp,c nmap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
   " 设置 F6 项目：测试
-  nnoremap <silent> <F6> :AsyncRun -cwd=<root> -raw make test <cr>
+  autocmd FileType cpp,c nmap <silent> <F6> :AsyncRun -cwd=<root> -raw make test <cr>
   " 设置 F5 单文件：运行
-  nnoremap <silent> <F5> :AsyncRun -raw -cwd=$(VIM_FILEDIR) "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+  autocmd FileType cpp,c nmap <silent> <F5> :AsyncRun -raw -cwd=$(VIM_FILEDIR) "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
   " 设置 F4 使用cmake生成Makefile
-  nnoremap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
+  autocmd FileType cpp,c nmap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
 
 " }}}
 "
@@ -177,4 +191,15 @@ call plug#end()
   let g:Lf_HideHelp = 1
   let g:Lf_StlColorscheme = 'powerline'
   let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+" }}}
+"
+" Vim-GO{{{
+  syntax enable
+  filetype plugin on
+  let g:go_disable_autoinstall = 0
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_build_constraints = 1
 " }}}
