@@ -52,6 +52,10 @@ call plug#end()
   map <C-l> <C-w>l
 
   map <leader>t :NERDTreeToggle<CR>
+
+  map <silent> <leader>fc :e ~/.vimrc<cr>
+  autocmd! bufwritepost .vimrc source ~/.vimrc
+
 " }}}
 
 " 基本设置 {{{
