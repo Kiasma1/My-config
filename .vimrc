@@ -36,15 +36,16 @@ Plug 'tpope/vim-surround'
 
 Plug 'mhinz/vim-signify'
 
+Plug 'preservim/nerdcommenter'
+
+Plug 'SirVer/ultisnips'
+
 call plug#end()
 
 " Key map {{{
   let mapleader = "\<Space>"
-  imap jj <Esc>
-  
-" imap ( ()<Esc>i
-" imap [ []<Esc>i
-" imap { {}<Esc>i
+  inoremap <Esc> <nop>
+  inoremap jj <Esc>
 
   map <C-h> <C-w>h
   map <C-j> <C-w>j
@@ -55,10 +56,14 @@ call plug#end()
 
   map <silent> <leader>fc :e ~/.vimrc<cr>
   autocmd! bufwritepost .vimrc source ~/.vimrc
-
 " }}}
 
 " 基本设置 {{{
+  let &t_SI.="\e[5 q"
+  let &t_SR.="\e[4 q"
+  let &t_EI.="\e[1 q"
+
+  set tags=./.tags;,.tags
   set updatetime=100
   set cursorline "突出当前行
   set number "显示行号
@@ -133,26 +138,7 @@ call plug#end()
   autocmd FileType cpp,c nmap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
 
 " }}}
-"
-" YCM {{{
-  let g:ycm_confirm_extra_conf = 1
-  let g:ycm_add_preview_to_completeopt = 0
-  let g:ycm_show_diagnostics_ui = 0
-  let g:ycm_server_log_level = 'info'
-  let g:ycm_min_num_identifier_candidate_chars = 2
-  let g:ycm_collect_identifiers_from_comments_and_strings = 1
-  let g:ycm_complete_in_strings=1
-  let g:ycm_key_invoke_completion = '<c-z>'
-  set completeopt=menu,menuone
-  
-  noremap <c-z> <NOP>
-  
-  let g:ycm_semantic_triggers =  {
-             \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-             \ 'cs,lua,javascript': ['re!\w{2}'],
-             \ }
-" }}}
-" 
+ 
 " ale {{{
   let g:ale_linters = {
   \   'c++': ['gcc'],
@@ -173,14 +159,14 @@ call plug#end()
   let g:ale_c_cppcheck_options = ''
   let g:ale_cpp_cppcheck_options = ''
 " }}}
-"
+
 " tagbar {{{
   nmap <F1> :TagbarToggle<CR>
 " }}}
-"
+
 " LeaderF {{{
   let g:Lf_ShortcutF = '<c-p>'
-  let g:Lf_ShortcutB = '<leader>b'
+  let g:Lf_ShortcutB = '<leader>n'
   noremap <c-n> :LeaderfMru<cr>
   noremap <leader>p :LeaderfFunction!<cr>
   noremap <leader>n :LeaderfBuffer<cr>
@@ -196,8 +182,8 @@ call plug#end()
   let g:Lf_StlColorscheme = 'powerline'
   let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
 " }}}
-"
-" Vim-GO{{{
+
+" Vim-go{{{
   syntax enable
   filetype plugin on
   let g:go_disable_autoinstall = 0
@@ -206,4 +192,22 @@ call plug#end()
   let g:go_highlight_structs = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
+" }}}
+
+" YCM {{{
+  let g:ycm_add_preview_to_completeopt = 0
+  let g:ycm_show_diagnostics_ui = 0
+  let g:ycm_server_log_level = 'info'
+  let g:ycm_min_num_identifier_candidate_chars = 2
+  let g:ycm_collect_identifiers_from_comments_and_strings = 1
+  let g:ycm_complete_in_strings=1
+  let g:ycm_key_invoke_completion = '<c-z>'
+  set completeopt=menu,menuone
+  
+  noremap <c-z> <NOP>
+  
+  let g:ycm_semantic_triggers =  {
+             \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+             \ 'cs,lua,javascript': ['re!\w{2}'],
+             \ }
 " }}}
