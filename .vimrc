@@ -6,11 +6,18 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 Plug 'universal-ctags/ctags'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'preservim/tagbar'
 
 Plug 'morhetz/gruvbox'
+Plug 'twerth/ir_black'
+Plug 'tomasr/molokai'
+Plug 'chriskempson/base16-vim'
+Plug 'nanotech/jellybeans.vim'
 
 Plug 'skywind3000/asyncrun.vim'
 Plug 'ycm-core/YouCompleteMe'
@@ -39,6 +46,9 @@ Plug 'mhinz/vim-signify'
 Plug 'preservim/nerdcommenter'
 
 Plug 'SirVer/ultisnips'
+Plug 'keelii/vim-snippets'
+
+Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 
@@ -51,6 +61,9 @@ call plug#end()
   map <C-j> <C-w>j
   map <C-k> <C-w>k
   map <C-l> <C-w>l
+
+  nnoremap [b :bp<CR>
+  nnoremap ]b :bn<CR>
 
   map <leader>t :NERDTreeToggle<CR>
 
@@ -73,12 +86,18 @@ call plug#end()
   set ignorecase  "忽略大小写
   set smartcase   "如果同时打开了ignorecase，那么对于只有一个大写字母的搜索词，将大小写敏感
   set linebreak   "只用遇到制定的符号（空格、连词号等标点符号），才发生折行，不会再单词内部折行
-" set list        "显示不可见字符
+  " set list        "显示不可见字符
   set fileformat=unix "文件格式
   set maxmempattern=2000000 "规定了vim做字符串匹配时使用的最大内存
   "" 主题
-  colorscheme gruvbox
-  set background=dark
+  syntax enable
+  colorscheme base16-default-dark
+  let base16colorspace=256
+  " set background=dark
+  set t_Co=256
+  " let g:gruvbox_contrast_dark="hard"
+  let g:rehash256=1
+
   "" 设置编码
   set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
   set encoding=utf-8
@@ -88,6 +107,8 @@ call plug#end()
   set shiftwidth=4
   set expandtab
   set softtabstop=4
+  
+  set helplang=cn
 " }}}
 
 " vim-gutentags {{{
@@ -125,6 +146,7 @@ call plug#end()
   " 设置 F9 单文件：编译
   autocmd FileType cpp nmap <silent> <F9> :AsyncRun g++ -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
   autocmd FileType c nmap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+  autocmd FileType go nmap <silent> <F9> :AsyncRun :!go run % <cr>
 
   " 设置 F8 项目：运行
   autocmd FileType cpp,c nmap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
@@ -162,6 +184,37 @@ call plug#end()
 
 " tagbar {{{
   nmap <F1> :TagbarToggle<CR>
+  let g:tagbar_width=30
+  let g:tagbar_sort=0
+
+  let g:tagbar_type_go = {
+      \ 'ctagstype' : 'go',
+      \ 'kinds'     : [
+          \ 'p:package',
+          \ 'i:imports:1',
+          \ 'c:constants',
+          \ 'v:variables',
+          \ 't:types',
+          \ 'n:interfaces',
+          \ 'w:fields',
+          \ 'e:embedded',
+          \ 'm:methods',
+          \ 'r:constructor',
+          \ 'f:functions'
+      \ ],
+      \ 'sro' : '.',
+      \ 'kind2scope' : {
+          \ 't' : 'ctype',
+          \ 'n' : 'ntype'
+      \ },
+      \ 'scope2kind' : {
+          \ 'ctype' : 't',
+          \ 'ntype' : 'n'
+      \ },
+      \ 'ctagsbin'  : 'gotags',
+      \ 'ctagsargs' : '-sort -silent'
+      \ 
+      \ }
 " }}}
 
 " LeaderF {{{
@@ -189,6 +242,8 @@ call plug#end()
   let g:go_disable_autoinstall = 0
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_types = 1
   let g:go_highlight_structs = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
@@ -210,4 +265,26 @@ call plug#end()
              \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
              \ 'cs,lua,javascript': ['re!\w{2}'],
              \ }
+" }}}
+
+" UltiSnips {{{
+  let g:UltiSnipsExpandTrigger="<C-e>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+
+  let g:UltiSnipsEditSplit="vertical"
+" }}}
+
+" airline {{{
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline_powerline_fonts = 1
+" }}}
+
+" easymotion {{{
+  let g:EasyMotion_smartcase=1
+  map <leader><leader>h <Plug>(easymotion-linebackward)
+  map <leader><leader>j <Plug>(easymotion-j)
+  map <leader><leader>k <Plug>(easymotion-k)
+  map <leader><leader>l <Plug>(easymotion-lineforward)
+  map <leader><leader>. <Plug>(easymotion-repeat)
 " }}}
